@@ -24,11 +24,79 @@ public class MyHashTable<K, V> {
         this.M = M;
         chainArray = new HashNode[M];
     }
-    private int hash(K key) {}
-    public void put(K key, V value) {}
-    public V get(K key) {}
-    public V remove(K key) {}
-    public boolean contains(V value) {}
-    public K getKey(V value) {}
+    private int hash(K key) {
+        return Math.abs(key.hashCode() % M);
+    }
+    public void put(K key, V value) {
+        int indx = hash(key);
+        HashNode<K, V> node = chainArray[indx];
+        while (node != null) {
+            if (node.key.equals(key)) {
+                node.value = value;
+                return;
+            }
+            node = node.next;
+        }
+        HashNode<K, V> newNode = new HashNode<>(key, value);
+        newNode.next = chainArray[indx];
+        chainArray[indx] = newNode;
+        size++;
+    }
+    public V get(K key) {
+        int indx = hash(key);
+        HashNode<K, V> node = chainArray[indx];
+        while (node != null) {
+            if (node.key.equals(key)) {
+                return node.value;
+            }
+            node = node.next;
+        }
+        return null;
+    }
+    public V remove(K key) {
+        int indx = hash(key);
+        HashNode<K, V> node = chainArray[indx];
+        HashNode<K, V> trgt = null;
+        while (node != null) {
+            if (node.key.equals(key)) {
+                if (trgt == null) {
+                    chainArray[indx] = node.next;
+                } else {
+                    trgt.next = node.next;
+                }
+                size--;
+                return node.value;
+            }
+            trgt = node;
+            node = node.next;
+        }
+        return null;
+
+    }
+    public boolean contains(V value) {
+        for (int i = 0; i < M; i++) {
+            HashNode<K, V> node = chainArray[i];
+            while (node != null) {
+                if (node.value.equals(value)) {
+                    return true;
+                }
+                node = node.next;
+            }
+        }
+        return false;
+
+    }
+    public K getKey(V value) {
+        for (int i = 0; i < M; i++) {
+            HashNode<K, V> node = chainArray[i];
+            while (node != null) {
+                if (node.value.equals(value)) {
+                    return node.key;
+                }
+                node = node.next;
+            }
+        }
+        return null;
+    }
 }
 
