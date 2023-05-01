@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class MyHashTable<K, V> {
     private class HashNode<K, V> {
         private K key;
@@ -97,6 +99,17 @@ public class MyHashTable<K, V> {
             }
         }
         return null;
+    }
+    public void printNumElementsInEachBucket() {
+        int[] bucketSizes = new int[M];
+        for (int i = 0; i < M; i++) {
+            HashNode<K, V> node = chainArray[i];
+            while (node != null) {
+                bucketSizes[i]++;
+                node = node.next;
+            }
+        }
+        System.out.println(Arrays.toString(bucketSizes));
     }
 }
 
