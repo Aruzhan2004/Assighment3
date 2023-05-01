@@ -1,8 +1,8 @@
 import java.util.Arrays;
 
 public class MyHashTable<K, V> {
-    private class HashNode<K, V> {
-        private K key;
+    private static class HashNode<K, V> {
+        private final K key;
         private V value;
         private HashNode<K, V> next;
 
@@ -16,9 +16,9 @@ public class MyHashTable<K, V> {
             return "{" + key + " " + value + "}";
         }
     }
-    private HashNode<K, V>[] chainArray; // or Object[]
+    private final HashNode<K, V>[] chainArray; // or Object[]
     private int M = 11; // default number of chains
-    private int size;
+
     public MyHashTable(){
         chainArray = new HashNode[M];
     }
@@ -42,7 +42,6 @@ public class MyHashTable<K, V> {
         HashNode<K, V> newNode = new HashNode<>(key, value);
         newNode.next = chainArray[indx];
         chainArray[indx] = newNode;
-        size++;
     }
     public V get(K key) {
         int indx = hash(key);
@@ -66,7 +65,6 @@ public class MyHashTable<K, V> {
                 } else {
                     trgt.next = node.next;
                 }
-                size--;
                 return node.value;
             }
             trgt = node;
@@ -100,7 +98,7 @@ public class MyHashTable<K, V> {
         }
         return null;
     }
-    public void printNumElementsInEachBucket() {
+    public int[] printNumElementsInEachBucket() {
         int[] bucketSizes = new int[M];
         for (int i = 0; i < M; i++) {
             HashNode<K, V> node = chainArray[i];
@@ -109,7 +107,7 @@ public class MyHashTable<K, V> {
                 node = node.next;
             }
         }
-        System.out.println(Arrays.toString(bucketSizes));
+        return bucketSizes;
     }
 }
 
